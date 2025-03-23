@@ -3,173 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stream Navegable</title>
+    <title>Streaming en Mosaico</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        html, body {
-            width: 100%;
+        body {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .stream-container {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .stream {
+            flex: 1 1 50%;
+            max-width: 50%;
             height: 100%;
-            overflow: hidden;
-            background-color: #000;
-            display: flex;
-        }
-        .sidebar {
-            width: 60px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 20px;
-        }
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 34px;
-            height: 20px;
-            margin-bottom: 20px;
-        }
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 20px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 14px;
-            width: 14px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        input:checked + .slider {
-            background-color: #4CAF50;
-        }
-        input:checked + .slider:before {
-            transform: translateX(14px);
-        }
-        .match-labels {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-        }
-        .match-label {
-            margin: 5px 0;
-            font-size: 12px;
-            color: white;
-            opacity: 0.7;
-        }
-        .container {
-            position: relative;
-            width: calc(100vw - 60px);
-            height: 100vh;
-            overflow: hidden;
-        }
-        .carousel {
-            display: flex;
-            width: 400vw;
-            height: 100vh;
-            transition: transform 0.5s ease-in-out;
         }
         iframe {
-            width: 100vw;
-            height: 100vh;
-            border: none;
-        }
-        .nav-button {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            font-size: 20px;
-            border-radius: 5px;
-        }
-        .prev { left: 10px; display: none; }
-        .next { right: 10px; }
-        .mosaic {
-            display: none;
             width: 100%;
             height: 100%;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-        }
-        .mosaic iframe {
-            width: 100%;
-            height: 100%;
+            border: none;
         }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <label class="toggle-switch">
-            <input type="checkbox" id="toggleView" onchange="toggleView()">
-            <span class="slider"></span>
-        </label>
-        <div class="match-labels">
-            <div class="match-label">GER-ITA</div>
-            <div class="match-label">POR-DEN</div>
-            <div class="match-label">FRA-CRO</div>
-            <div class="match-label">ESP-NED</div>
+    <div class="stream-container">
+        <div class="stream">
+            <iframe src="https://streamtp3.com/global2.php?stream=disney15" allowfullscreen></iframe>
+        </div>
+        <div class="stream">
+            <iframe src="https://streamtp3.com/global2.php?stream=disney16" allowfullscreen></iframe>
         </div>
     </div>
-    <div class="container">
-        <div class="carousel" id="carousel">
-            <iframe src="https://www.disneyplus.com/es-419/play/188e562e-ec6e-4d95-ba91-c8ebe3fb7bd6&mute=1" id="stream0" allow="autoplay"></iframe>
-            <iframe src="https://streamtp3.com/global2.php?stream=disney14&mute=1" id="stream1" allow="autoplay"></iframe>
-            <iframe src="https://streamtp3.com/global2.php?stream=disney15&mute=1" id="stream2" allow="autoplay"></iframe>
-            <iframe src="https://streamtp3.com/global2.php?stream=disney16&mute=1" id="stream3" allow="autoplay"></iframe>
-        </div>
-        <div class="mosaic" id="mosaic">
-            <iframe src="https://streamtp3.com/global2.php?stream=disney13&mute=1" id="mosaic0"></iframe>
-            <iframe src="https://streamtp3.com/global2.php?stream=disney14&mute=1" id="mosaic1"></iframe>
-            <iframe src="https://streamtp3.com/global2.php?stream=disney15&mute=1" id="mosaic2"></iframe>
-            <iframe src="https://streamtp3.com/global2.php?stream=disney16&mute=1" id="mosaic3"></iframe>
-        </div>
-        <button class="nav-button prev" id="prev" onclick="moveCarousel(-1)" style="display: none;">&lt;</button>
-        <button class="nav-button next" id="next" onclick="moveCarousel(1)">&gt;</button>
-    </div>
-    <script>
-        let index = 0;
-        function moveCarousel(direction) {
-            const carousel = document.getElementById("carousel");
-            index += direction;
-            index = Math.max(0, Math.min(index, 3));
-            carousel.style.transform = `translateX(-${index * 100}vw)`;
-            document.getElementById("prev").style.display = index === 0 ? "none" : "block";
-            document.getElementById("next").style.display = index === 3 ? "none" : "block";
-        }
-
-        function toggleView() {
-            const isChecked = document.getElementById("toggleView").checked;
-            document.getElementById("carousel").style.display = isChecked ? "none" : "flex";
-            document.getElementById("mosaic").style.display = isChecked ? "grid" : "none";
-            document.getElementById("prev").style.display = isChecked ? "none" : (index === 0 ? "none" : "block");
-            document.getElementById("next").style.display = isChecked ? "none" : (index === 3 ? "none" : "block");
-        }
-    </script>
 </body>
 </html>
