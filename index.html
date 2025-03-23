@@ -50,18 +50,32 @@
         }
         .prev { left: 10px; display: none; }
         .next { right: 10px; }
+        .sound-button {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="carousel" id="carousel">
-            <iframe src="https://streamtp3.com/global2.php?stream=disney13" id="stream0"></iframe>
-            <iframe src="https://streamtp3.com/global2.php?stream=disney14" id="stream1"></iframe>
-            <iframe src="https://streamtp3.com/global2.php?stream=disney15" id="stream2"></iframe>
-            <iframe src="https://streamtp3.com/global2.php?stream=disney16" id="stream3"></iframe>
+            <iframe src="https://streamtp3.com/global2.php?stream=disney13" id="stream0" allow="autoplay"></iframe>
+            <iframe src="https://streamtp3.com/global2.php?stream=disney14" id="stream1" allow="autoplay"></iframe>
+            <iframe src="https://streamtp3.com/global2.php?stream=disney15" id="stream2" allow="autoplay"></iframe>
+            <iframe src="https://streamtp3.com/global2.php?stream=disney16" id="stream3" allow="autoplay"></iframe>
         </div>
         <button class="nav-button prev" id="prev" onclick="moveCarousel(-1)">&lt;</button>
         <button class="nav-button next" id="next" onclick="moveCarousel(1)">&gt;</button>
+        <button class="sound-button" onclick="activateSound()">Activar Sonido</button>
     </div>
 
     <script>
@@ -81,25 +95,18 @@
             prevBtn.style.display = index === 0 ? "none" : "block";
             nextBtn.style.display = index === 3 ? "none" : "block";
             
-            // Intentar activar sonido del stream visible y ocultar botones de los otros
+            // Mutea todos los streams excepto el actual
             streams.forEach((stream, i) => {
-                if (i === index) {
-                    stream.contentWindow.postMessage("unmute", "*");
-                } else {
-                    stream.contentWindow.postMessage("mute", "*");
-                }
+                stream.src = stream.src.split("&mute=")[0] + `&mute=${i === index ? 0 : 1}`;
             });
         }
 
-        // Escuchar mensajes desde los iframes para detectar si se puede activar el sonido
-        window.addEventListener("message", (event) => {
-            if (event.data === "unmute") {
-                const iframe = document.getElementById(`stream${index}`);
-                if (iframe) {
-                    iframe.contentWindow.document.querySelector(".sound-button")?.click();
-                }
+        function activateSound() {
+            const activeIframe = document.getElementById(`stream${index}`);
+            if (activeIframe) {
+                activeIframe.contentWindow.postMessage("click", "*");
             }
-        });
+        }
     </script>
 </body>
 </html>
