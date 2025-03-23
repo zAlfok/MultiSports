@@ -106,7 +106,7 @@
             font-size: 20px;
             border-radius: 5px;
         }
-        .prev { left: 10px; }
+        .prev { left: 10px; display: none; }
         .next { right: 10px; }
     </style>
 </head>
@@ -153,8 +153,8 @@
             const isChecked = document.getElementById("toggleView").checked;
             document.getElementById("carousel").style.display = isChecked ? "none" : "flex";
             document.getElementById("mosaic").style.display = isChecked ? "grid" : "none";
-            document.getElementById("prev").style.display = isChecked ? "none" : (index === 0 ? "none" : "block");
-            document.getElementById("next").style.display = isChecked ? "none" : (index === 3 ? "none" : "block");
+            document.getElementById("prev").style.display = isChecked || index === 0 ? "none" : "block";
+            document.getElementById("next").style.display = isChecked || index === 3 ? "none" : "block";
         }
     </script>
 </body>
