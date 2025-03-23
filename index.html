@@ -26,14 +26,44 @@
             align-items: center;
             padding-top: 20px;
         }
-        .sidebar button {
-            background: none;
-            border: none;
-            color: white;
-            padding: 10px;
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 34px;
+            height: 20px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
             cursor: pointer;
-            font-size: 16px;
-            margin-bottom: 10px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #4CAF50;
+        }
+        input:checked + .slider:before {
+            transform: translateX(14px);
         }
         .container {
             position: relative;
@@ -76,14 +106,16 @@
             font-size: 20px;
             border-radius: 5px;
         }
-        .prev { left: 10px; display: none; }
+        .prev { left: 10px; }
         .next { right: 10px; }
     </style>
 </head>
 <body>
     <div class="sidebar">
-        <button onclick="toggleView('carousel')">📜</button>
-        <button onclick="toggleView('mosaic')">🔲</button>
+        <label class="toggle-switch">
+            <input type="checkbox" id="toggleView" onchange="toggleView()">
+            <span class="slider"></span>
+        </label>
     </div>
     <div class="container">
         <div class="carousel" id="carousel">
@@ -98,10 +130,9 @@
             <iframe src="https://streamtp3.com/global2.php?stream=disney15&mute=1"></iframe>
             <iframe src="https://streamtp3.com/global2.php?stream=disney16&mute=1"></iframe>
         </div>
-        <button class="nav-button prev" id="prev" onclick="moveCarousel(-1)" style="display: none;">&lt;</button>
+        <button class="nav-button prev" id="prev" onclick="moveCarousel(-1)">&lt;</button>
         <button class="nav-button next" id="next" onclick="moveCarousel(1)">&gt;</button>
     </div>
-
     <script>
         let index = 0;
         function moveCarousel(direction) {
@@ -110,7 +141,7 @@
             const nextBtn = document.getElementById("next");
             
             index += direction;
-            index = Math.max(0, Math.min(index, 3)); 
+            index = Math.max(0, Math.min(index, 3));
             
             carousel.style.transform = `translateX(-${index * 100}vw)`;
             
@@ -118,9 +149,12 @@
             nextBtn.style.display = index === 3 ? "none" : "block";
         }
 
-        function toggleView(view) {
-            document.getElementById("carousel").style.display = view === "carousel" ? "flex" : "none";
-            document.getElementById("mosaic").style.display = view === "mosaic" ? "grid" : "none";
+        function toggleView() {
+            const isChecked = document.getElementById("toggleView").checked;
+            document.getElementById("carousel").style.display = isChecked ? "none" : "flex";
+            document.getElementById("mosaic").style.display = isChecked ? "grid" : "none";
+            document.getElementById("prev").style.display = isChecked ? "none" : (index === 0 ? "none" : "block");
+            document.getElementById("next").style.display = isChecked ? "none" : (index === 3 ? "none" : "block");
         }
     </script>
 </body>
