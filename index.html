@@ -68,12 +68,12 @@
 <body>
     <div class="container">
         <div class="carousel" id="carousel">
-            <iframe src="https://streamtp3.com/global2.php?stream=disney13" id="stream0" allow="autoplay"></iframe>
-            <iframe src="https://streamtp3.com/global2.php?stream=disney14" id="stream1" allow="autoplay"></iframe>
-            <iframe src="https://streamtp3.com/global2.php?stream=disney15" id="stream2" allow="autoplay"></iframe>
-            <iframe src="https://streamtp3.com/global2.php?stream=disney16" id="stream3" allow="autoplay"></iframe>
+            <iframe src="https://streamtp3.com/global2.php?stream=disney13&mute=1" id="stream0" allow="autoplay"></iframe>
+            <iframe src="https://streamtp3.com/global2.php?stream=disney14&mute=1" id="stream1" allow="autoplay"></iframe>
+            <iframe src="https://streamtp3.com/global2.php?stream=disney15&mute=1" id="stream2" allow="autoplay"></iframe>
+            <iframe src="https://streamtp3.com/global2.php?stream=disney16&mute=1" id="stream3" allow="autoplay"></iframe>
         </div>
-        <button class="nav-button prev" id="prev" onclick="moveCarousel(-1)">&lt;</button>
+        <button class="nav-button prev" id="prev" onclick="moveCarousel(-1)" style="display: none;">&lt;</button>
         <button class="nav-button next" id="next" onclick="moveCarousel(1)">&gt;</button>
         <button class="sound-button" onclick="activateSound()">Activar Sonido</button>
     </div>
@@ -97,15 +97,9 @@
             
             // Mutea todos los streams excepto el actual
             streams.forEach((stream, i) => {
-                stream.src = stream.src.split("&mute=")[0] + `&mute=${i === index ? 0 : 1}`;
+                let newSrc = stream.src.replace(/&mute=\d/, "");
+                stream.src = newSrc + `&mute=${i === index ? 0 : 1}`;
             });
-        }
-
-        function activateSound() {
-            const activeIframe = document.getElementById(`stream${index}`);
-            if (activeIframe) {
-                activeIframe.contentWindow.postMessage("click", "*");
-            }
         }
     </script>
 </body>
