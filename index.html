@@ -55,10 +55,10 @@
 <body>
     <div class="container">
         <div class="carousel" id="carousel">
-            <iframe src="https://streamtp3.com/global2.php?stream=disney13" allowfullscreen></iframe>
-            <iframe src="https://streamtp3.com/global2.php?stream=disney14" allowfullscreen></iframe>
-            <iframe src="https://streamtp3.com/global2.php?stream=disney15" allowfullscreen></iframe>
-            <iframe src="https://streamtp3.com/global2.php?stream=disney16" allowfullscreen></iframe>
+            <iframe src="https://streamtp3.com/global2.php?stream=disney13" allow="autoplay" id="stream0"></iframe>
+            <iframe src="https://streamtp3.com/global2.php?stream=disney14" allow="autoplay" id="stream1"></iframe>
+            <iframe src="https://streamtp3.com/global2.php?stream=disney15" allow="autoplay" id="stream2"></iframe>
+            <iframe src="https://streamtp3.com/global2.php?stream=disney16" allow="autoplay" id="stream3"></iframe>
         </div>
         <button class="nav-button prev" id="prev" onclick="moveCarousel(-1)">&lt;</button>
         <button class="nav-button next" id="next" onclick="moveCarousel(1)">&gt;</button>
@@ -70,6 +70,7 @@
             const carousel = document.getElementById("carousel");
             const prevBtn = document.getElementById("prev");
             const nextBtn = document.getElementById("next");
+            const streams = document.querySelectorAll("iframe");
             
             index += direction;
             index = Math.max(0, Math.min(index, 3)); // Asegura que esté entre 0 y 3
@@ -79,6 +80,11 @@
             // Mostrar/ocultar botones según la posición
             prevBtn.style.display = index === 0 ? "none" : "block";
             nextBtn.style.display = index === 3 ? "none" : "block";
+            
+            // Mutear todos los streams excepto el actual
+            streams.forEach((stream, i) => {
+                stream.src = stream.src.split("&mute=")[0] + `&mute=${i === index ? 0 : 1}`;
+            });
         }
     </script>
 </body>
